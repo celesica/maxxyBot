@@ -8,7 +8,7 @@ import os
 
 # ---------- Discord channel names (set these to match your server exactly) ----------
 GOAL_CHANNEL_NAME = "goal-tracker"       # combined: started, checkins, achieved
-ADMIN_ALERT_CHANNEL_NAME = "admin-alerts"
+ADMIN_ALERT_CHANNEL_NAME = "admin-and-sr"
 
 # ---------- Roles allowed to /goal-verify and /goal-achieved ----------
 VERIFIER_ROLES = ["Senior", "admin", "TAMBAY"]
