@@ -28,3 +28,4 @@ REMINDER_DAY_ADMIN_ALERT = 9
 
 # ---------- Bot token (read from environment, never hardcoded) ----------
 BOT_TOKEN = os.environ.get("MAXXY_BOT_TOKEN")
+APPLICATION_ID = os.environ.get("MAXXY_APPLICATION_ID")
