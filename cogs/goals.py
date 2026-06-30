@@ -188,6 +188,48 @@ class Goals(commands.Cog):
         )
         await interaction.response.send_message(embed=embed)
 
+    # ---------- /maxxy-help ----------
+
+    @app_commands.command(name="maxxy-help", description="See everything Maxxy can do")
+    async def maxxy_help(self, interaction: discord.Interaction):
+        embed = discord.Embed(
+            title="✨ What Maxxy can do",
+            description="Your accountability buddy — here's the full command list.",
+            color=config.COLOR_CHECKIN,
+        )
+        embed.add_field(
+            name="🌱 Starting & managing a goal",
+            value=(
+                "`/goal-start` — share a new goal (title, what success looks like, timeline)\n"
+                "`/goal-pause` — pause a goal, no reminders while paused\n"
+                "`/goal-resume` — resume a paused goal\n"
+                "`/goal-abandon` — drop a goal you're no longer pursuing, no judgment"
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="💫 Tracking progress",
+            value=(
+                "`/checkin` — post a progress update (text + optional screenshot) on one of your goals\n"
+                "`/my-goals` — see your own goals and their status\n"
+                "`/active-goals` — see everyone's active goals across the server"
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="🛡️ Senior / admin / TAMBAY only",
+            value=(
+                "`/goal-verify` — mark a check-in as seen and counted\n"
+                "`/goal-achieved` — mark a goal as fully completed 🎉"
+            ),
+            inline=False,
+        )
+        embed.set_footer(
+            text="Reminders happen on day 3 (public), day 6 (DM), and day 9 (admin alert) "
+                 "since your last check-in. ✨"
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
     # ---------- /goal-pause, /goal-resume, /goal-abandon ----------
 
     async def _change_status(self, interaction, goal_id, new_status, event_type, verb):
