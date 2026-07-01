@@ -4,6 +4,7 @@ Member-facing commands: /goal-start, /checkin, /my-goals, /active-goals,
 /goal-pause, /goal-resume, /goal-abandon.
 """
 
+import datetime
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -11,6 +12,17 @@ from discord.ext import commands
 import database as db
 import embeds
 import config
+
+
+def format_last_checkin(iso_timestamp: str | None) -> str:
+    """Convert a stored ISO timestamp into Discord's native relative-time format
+    (renders as '2 hours ago', auto-adjusted to each viewer's timezone), or a
+    friendly fallback if there's no check-in yet."""
+    if not iso_timestamp:
+        return "_no check-ins yet_"
+    dt = datetime.datetime.fromisoformat(iso_timestamp)
+    unix_ts = int(dt.replace(tzinfo=datetime.timezone.utc).timestamp())
+    return f"<t:{unix_ts}:R>"
 
 
 class GoalStartModal(discord.ui.Modal, title="Start a new goal"):
@@ -152,16 +164,14 @@ class Goals(commands.Cog):
             )
             return
 
-        lines = []
+        embed = discord.Embed(title="✨ Your goals", color=config.COLOR_CHECKIN)
         for g in goals:
-            last = g["last_checkin_at"] or "no check-ins yet"
-            lines.append(f"**{g['goal_id']}** — {g['title']} · `{g['status']}` · last: {last}")
-
-        embed = discord.Embed(
-            title="✨ Your goals",
-            description="\n".join(lines),
-            color=config.COLOR_CHECKIN,
-        )
+            last = format_last_checkin(g["last_checkin_at"])
+            embed.add_field(
+                name=f"{g['title']}  ·  `{g['status']}`",
+                value=f"**ID:** `{g['goal_id']}`\n**Last check-in:** {last}",
+                inline=False,
+            )
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
     # ---------- /active-goals ----------
@@ -176,18 +186,16 @@ class Goals(commands.Cog):
             await interaction.response.send_message(embed=embed)
             return
 
-        lines = []
+        embed = discord.Embed(title="✨ Active goals", color=config.COLOR_CHECKIN)
         for g in goals:
             member = interaction.guild.get_member(int(g["discord_id"]))
             name = member.display_name if member else g["discord_id"]
-            last = g["last_checkin_at"] or "no check-ins yet"
-            lines.append(f"**{g['goal_id']}** — {g['title']} · {name} · last: {last}")
-
-        embed = discord.Embed(
-            title="✨ Active goals",
-            description="\n".join(lines),
-            color=config.COLOR_CHECKIN,
-        )
+            last = format_last_checkin(g["last_checkin_at"])
+            embed.add_field(
+                name=f"{g['title']}  ·  {name}",
+                value=f"**ID:** `{g['goal_id']}`\n**Last check-in:** {last}",
+                inline=False,
+            )
         await interaction.response.send_message(embed=embed)
 
     # ---------- /maxxy-help ----------
