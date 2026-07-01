@@ -141,7 +141,7 @@ def get_user_goals(discord_id: str, status: str = None):
 def get_all_active_goals():
     with get_conn() as conn:
         return conn.execute(
-            "SELECT * FROM goals WHERE status = 'active' ORDER BY last_checkin_at"
+            "SELECT * FROM goals WHERE status = 'active' ORDER BY discord_id, created_at"
         ).fetchall()
 
 

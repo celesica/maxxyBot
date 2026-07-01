@@ -186,16 +186,29 @@ class Goals(commands.Cog):
             await interaction.response.send_message(embed=embed)
             return
 
-        embed = discord.Embed(title="✨ Active goals", color=config.COLOR_CHECKIN)
+        # Group goals by owner, preserving each person's goals in the order
+        # they were created (oldest first), then list people in that same order.
+        by_user = {}
         for g in goals:
-            member = interaction.guild.get_member(int(g["discord_id"]))
-            name = member.display_name if member else g["discord_id"]
-            last = format_last_checkin(g["last_checkin_at"])
-            embed.add_field(
-                name=f"{g['title']}  ·  {name}",
-                value=f"**ID:** `{g['goal_id']}`\n**Last check-in:** {last}",
-                inline=False,
-            )
+            by_user.setdefault(g["discord_id"], []).append(g)
+
+        embed = discord.Embed(title="✨ Active goals", color=config.COLOR_CHECKIN)
+        for discord_id, user_goals in by_user.items():
+            member = interaction.guild.get_member(int(discord_id))
+            name = member.display_name if member else discord_id
+
+            goal_blocks = []
+            for g in user_goals:
+                last = format_last_checkin(g["last_checkin_at"])
+                goal_blocks.append(
+                    f"`{g['goal_id']}`\n{g['title']}\nLast check-in: {last}"
+                )
+            value = "\n\n".join(goal_blocks)
+
+            embed.add_field(name=f"👤 {name}", value=value, inline=False)
+            # spacer field so each person's block has visible breathing room
+            embed.add_field(name="\u200b", value="\u200b", inline=False)
+
         await interaction.response.send_message(embed=embed)
 
     # ---------- /maxxy-help ----------
