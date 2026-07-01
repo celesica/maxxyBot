@@ -10,7 +10,7 @@ import config
 
 def goal_started_embed(member: discord.Member, goal_id, title, description, timeline):
     embed = discord.Embed(
-        title="✨ New goal alert!",
+        title="📌 New Goal Alert!",
         description=f"{member.mention} just started something new.",
         color=config.COLOR_STARTED,
     )
@@ -24,7 +24,7 @@ def goal_started_embed(member: discord.Member, goal_id, title, description, time
 
 def checkin_embed(member: discord.Member, goal_id, title, update_text, attachment_url=None):
     embed = discord.Embed(
-        title="✨ Progress update",
+        title="✨ Progress Update",
         description=f"{member.mention} checked in on **{title}**",
         color=config.COLOR_CHECKIN,
     )
@@ -37,7 +37,7 @@ def checkin_embed(member: discord.Member, goal_id, title, update_text, attachmen
 
 def verified_embed(member: discord.Member, admin: discord.Member):
     embed = discord.Embed(
-        description=f"✨ Seen and verified by {admin.mention}.\n"
+        description=f"✨ Seen and Verified by {admin.mention}.\n"
         f"Keep going, {member.mention} — this is how it gets done. 💫",
         color=config.COLOR_VERIFIED,
     )
@@ -80,7 +80,7 @@ def reminder_dm_embed(title):
 
 def admin_alert_embed(member: discord.Member, title, goal_id, last_checkin_str):
     embed = discord.Embed(
-        title="⚠️ Stale goal flag",
+        title="⚠️ Stale Goal Flag",
         description=f"**{goal_id}** — *{title}*",
         color=config.COLOR_ALERT,
     )

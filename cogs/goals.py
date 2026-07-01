@@ -164,7 +164,7 @@ class Goals(commands.Cog):
             )
             return
 
-        embed = discord.Embed(title="✨ Your goals", color=config.COLOR_CHECKIN)
+        embed = discord.Embed(title="✨ Your Goals", color=config.COLOR_CHECKIN)
         for g in goals:
             last = format_last_checkin(g["last_checkin_at"])
             embed.add_field(
@@ -202,7 +202,7 @@ class Goals(commands.Cog):
             for g in user_goals:
                 last = format_last_checkin(g["last_checkin_at"])
                 goal_lines.append(
-                    f"`{g['goal_id']}`\n{g['title']}\nLast check-in: {last}"
+                    f"`{g['goal_id']}`\n**{g['title']}**\nLast check-in: {last}"
                 )
             goals_text = "\n\n".join(goal_lines)
             person_blocks.append(f"👤 **{name}**\n{goals_text}")
@@ -210,7 +210,7 @@ class Goals(commands.Cog):
         description = f"\n{divider}\n".join(person_blocks)
 
         embed = discord.Embed(
-            title="✨ Active goals", description=description, color=config.COLOR_CHECKIN
+            title="✨ Active Goals", description=description, color=config.COLOR_CHECKIN
         )
 
         await interaction.response.send_message(embed=embed)
@@ -220,12 +220,12 @@ class Goals(commands.Cog):
     @app_commands.command(name="maxxy-help", description="See everything Maxxy can do")
     async def maxxy_help(self, interaction: discord.Interaction):
         embed = discord.Embed(
-            title="✨ What Maxxy can do",
+            title="✨ What Maxxy Can Do",
             description="Your accountability buddy — here's the full command list.",
             color=config.COLOR_CHECKIN,
         )
         embed.add_field(
-            name="🌱 Starting & managing a goal",
+            name="🌱 Starting & Managing A Goal",
             value=(
                 "`/goal-start` — share a new goal (title, what success looks like, timeline)\n"
                 "`/goal-pause` — pause a goal, no reminders while paused\n"
@@ -235,7 +235,7 @@ class Goals(commands.Cog):
             inline=False,
         )
         embed.add_field(
-            name="💫 Tracking progress",
+            name="💫 Tracking Progress",
             value=(
                 "`/checkin` — post a progress update (text + optional screenshot) on one of your goals\n"
                 "`/my-goals` — see your own goals and their status\n"
