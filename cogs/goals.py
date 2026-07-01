@@ -187,27 +187,31 @@ class Goals(commands.Cog):
             return
 
         # Group goals by owner, preserving each person's goals in the order
-        # they were created (oldest first), then list people in that same order.
+        # they were created (oldest first).
         by_user = {}
         for g in goals:
             by_user.setdefault(g["discord_id"], []).append(g)
 
-        embed = discord.Embed(title="✨ Active goals", color=config.COLOR_CHECKIN)
+        divider = "┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+        person_blocks = []
         for discord_id, user_goals in by_user.items():
             member = interaction.guild.get_member(int(discord_id))
             name = member.display_name if member else discord_id
 
-            goal_blocks = []
+            goal_lines = []
             for g in user_goals:
                 last = format_last_checkin(g["last_checkin_at"])
-                goal_blocks.append(
+                goal_lines.append(
                     f"`{g['goal_id']}`\n{g['title']}\nLast check-in: {last}"
                 )
-            value = "\n\n".join(goal_blocks)
+            goals_text = "\n\n".join(goal_lines)
+            person_blocks.append(f"👤 **{name}**\n{goals_text}")
 
-            embed.add_field(name=f"👤 {name}", value=value, inline=False)
-            # spacer field so each person's block has visible breathing room
-            embed.add_field(name="\u200b", value="\u200b", inline=False)
+        description = f"\n{divider}\n".join(person_blocks)
+
+        embed = discord.Embed(
+            title="✨ Active goals", description=description, color=config.COLOR_CHECKIN
+        )
 
         await interaction.response.send_message(embed=embed)
 
