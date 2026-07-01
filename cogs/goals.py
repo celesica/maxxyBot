@@ -43,6 +43,8 @@ class GoalStartModal(discord.ui.Modal, title="Start a new goal"):
         discord_id = str(interaction.user.id)
         username = interaction.user.name
 
+        member = interaction.guild.get_member(interaction.user.id) or interaction.user
+
         db.ensure_user(discord_id, username)
         goal_num = db.next_goal_number(discord_id)
         goal_id = f"g-{username.lower()}-{goal_num}"
@@ -56,7 +58,7 @@ class GoalStartModal(discord.ui.Modal, title="Start a new goal"):
         )
 
         embed = embeds.goal_started_embed(
-            interaction.user,
+            member,
             goal_id,
             self.goal_title.value,
             self.success_description.value,
