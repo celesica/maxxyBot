@@ -202,7 +202,7 @@ class Goals(commands.Cog):
             for g in user_goals:
                 last = format_last_checkin(g["last_checkin_at"])
                 goal_lines.append(
-                    f"`{g['goal_id']}`\n**{g['title']}**\nLast check-in: {last}"
+                    f"`{g['goal_id']}`\n  - ` {g['title']} `\n  - Last check-in: {last}"
                 )
             goals_text = "\n\n".join(goal_lines)
             person_blocks.append(f"👤 **{name}**\n{goals_text}")
